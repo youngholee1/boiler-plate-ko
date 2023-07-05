@@ -2,6 +2,9 @@ const express = require('express')
 const app = express()
 const port = 5000
 const bodyParser = require('body-parser');
+
+const config = require('./config/key');
+
 const { User } = require("./models/User");
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -9,7 +12,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 const mongoose = require('mongoose')
-mongoose.connect('mongodb+srv://yhl1173:fkaus55@cluster0.tm4fthb.mongodb.net/').then(() => console.log("MongoDB Connected.."))
+console.log(config.mongoURI)
+mongoose.connect(config.mongoURI, {
+  useNewUrlParser: true, useUnifiedTopology: true
+}).then(() => console.log("MongoDB Connected.."))
   .catch(err => console.log(err))
 
 app.get('/', (req, res) => {
@@ -32,6 +38,22 @@ app.post('/register', async (req, res) => {
     })
   }).catch((err)=>{
     res.json({ success: false, err })
+  })
+})
+
+app.post('/login', (req, res) => {
+  User.findOne({ email: req.body.email}, (err, userInfo) => {
+    if(!userInfo) {
+      return res.json({
+        loginSuccess: false,
+        message: "제공된 이메일에 해당된 유저가 없습니다."
+      })
+    }
+
+    user.comparePassword(req.body.password, (err, isMatch) => {
+      if(!isMatch)
+      return res.json({loginSuccess: false, message: "비밀번호가 틀렸습니다."})
+    })
   })
 })
 
