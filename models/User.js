@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10
 
 //ab
-const userSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({//
     name: {
         type : String,
         maxlength: 50
@@ -30,7 +30,7 @@ const userSchema = mongoose.Schema({
     }
 })
 
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function(next) {//11
     var user = this;
     if(user.isModified('password')) {
         bcrypt.genSalt(saltRounds, function(err, salt) {
