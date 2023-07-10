@@ -3,7 +3,7 @@ const app = express()
 const port = 5000
 const bodyParser = require('body-parser');
 
-const config = require('./config/key'); // 
+const config = require('./config/key'); ///.
 
 const { User } = require("./models/User");
 
