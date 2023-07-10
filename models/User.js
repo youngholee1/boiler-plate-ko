@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10
 
 //ab
-const userSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({//
     name: {
         type : String,
         maxlength: 50
