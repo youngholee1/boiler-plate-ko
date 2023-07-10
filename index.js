@@ -3,7 +3,7 @@ const app = express()
 const port = 5000
 const bodyParser = require('body-parser');
 
-const config = require('./config/key');
+const config = require('./config/key'); // 
 
 const { User } = require("./models/User");
 
@@ -31,7 +31,6 @@ app.post('/register', async (req, res) => {
   const user = new User(req.body)
 
   //mongoDB 메서드, user모델에 저장
-  console.log("확인 : " + res.status)
   const result = await user.save().then(()=>{
     res.status(200).json({
       success: true
@@ -53,6 +52,10 @@ app.post('/login', (req, res) => {
     user.comparePassword(req.body.password, (err, isMatch) => {
       if(!isMatch)
       return res.json({loginSuccess: false, message: "비밀번호가 틀렸습니다."})
+
+      user.generateToken((err, user) => {
+
+      })
     })
   })
 })
