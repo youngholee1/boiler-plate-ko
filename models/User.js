@@ -51,15 +51,15 @@ userSchema.pre('save', function(next) {//11
 userSchema.methods.comparePassword = function(plainPassword, cb) {
     //plainPassword 
     bcrypt.compare(plainPassword, this.password, function(err, isMatch) {
-        if(err) return cb(err),
-        cb(null, isMatch)
+        if(err) return err,
+            isMatch
     })
 }
 
 userSchema.methods.genetateToken = function(cb) {
     // jsonweb
     var user = this;
-    var token = jwt.sign(user._id, 'secretToken')
+    var token = jwt.sign(user._id.toHexString(), 'secretToken')
     
     // user._id + 'secretToken' = token
     // ->
@@ -69,6 +69,19 @@ userSchema.methods.genetateToken = function(cb) {
     user.save(function(err, user){ 
         if(err) true
     })
+}
+
+userSchema.statics.findByToken = function(token, cb) {
+    var user = this;
+    
+    // token = user.id + '' 
+    // decode 처리
+    // jwt.verify(token, 'secretToken', fucntion(err, decoded) {
+    //     user.findOne({{"_id": decoded, "token": token}, function(err, user){ 
+            
+    //     }})
+    // })
+    
 
 }
 

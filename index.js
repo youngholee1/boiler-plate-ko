@@ -6,6 +6,7 @@ const bodyParser = require('body-parser'); // bodyparser
 
 const config = require('./config/key');
 
+const { auth } = require("./middleware/auth");
 const { User } = require("./models/User");
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -44,7 +45,7 @@ app.post('/register', async (req, res) => {
 
 
 
-app.post('/login',(req, res) =>{
+app.post('/login',async(req, res) =>{ 
   // 요청된 이메일을 데이터베이스 찾기
   User.findOne({email: req.body.email})
   .then(docs=>{
@@ -53,6 +54,7 @@ app.post('/login',(req, res) =>{
               loginSuccess: false,
               messsage: "제공된 이메일에 해당하는 유저가 없습니다."
           })
+      } else {
       }
       docs.comparePassword(req.body.password, (err, isMatch) => {
           if(!isMatch) return res.json({loginSuccess: false, messsage: "비밀번호가 틀렸습니다."})
@@ -98,6 +100,10 @@ app.post('/login',(req, res) =>{
 //     })
 //   })
 // })
+
+app.post('/api/users/auth',auth , (req, res) => {
+
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
